@@ -3,6 +3,8 @@ package com.devstack.customerserviceapi.service.impl;
 import com.devstack.customerserviceapi.config.WebClientConfig;
 import com.devstack.customerserviceapi.dto.CustomerDto;
 import com.devstack.customerserviceapi.dto.OrderDto;
+import com.devstack.customerserviceapi.dto.ResponseCustomerDto;
+import com.devstack.customerserviceapi.dto.ResponseOrderDto;
 import com.devstack.customerserviceapi.entity.Customer;
 import com.devstack.customerserviceapi.repo.CustomerRepo;
 import com.devstack.customerserviceapi.service.CustomerService;
@@ -38,27 +40,25 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerDto findCustomerById(Long id) {
+    public ResponseCustomerDto findCustomerById(Long id) {
         Optional<Customer> selectedCustomer = customerRepo.findById(id);
         if (selectedCustomer.isEmpty()){
             throw new RuntimeException("Not found");
         }
-        findOrders(selectedCustomer.get().getId());
-        return new CustomerDto(
+        ResponseOrderDto orders = findOrders(selectedCustomer.get().getId());
+        CustomerDto customerDto = new CustomerDto(
                 selectedCustomer.get().getId(),
                 selectedCustomer.get().getName(),
                 selectedCustomer.get().getAddress(),
                 selectedCustomer.get().getSalary()
-
         );
-
+        return new ResponseCustomerDto(customerDto,orders);
     }
+    private ResponseOrderDto findOrders(Long id){
+        Mono<ResponseOrderDto> orderDtoMono = webClient.get().uri("/get-by-customer-id/" + id)
+                .retrieve().bodyToMono(ResponseOrderDto.class);
 
-    private List<OrderDto> findOrders(Long id){
-        Mono<OrderDto> orderDtoMono = webClient.get().uri("get-by-customer-id/" + id)
-                .retrieve().bodyToMono(OrderDto.class);
-        System.out.println(orderDtoMono.block());
-        return null;
+        return orderDtoMono.block();
     }
 
 }

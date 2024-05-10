@@ -11,7 +11,6 @@ public class WebClientConfig {
     private String orderServiceUrl;
 
 
-
     @Bean
     public WebClient webClient(){
         WebClient webClient = WebClient.builder()
