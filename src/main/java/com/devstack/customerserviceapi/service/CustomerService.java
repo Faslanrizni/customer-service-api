@@ -10,4 +10,5 @@ import org.springframework.stereotype.Service;
 public interface CustomerService {
 
     public void createCustomer(CustomerDto customerDto);
+    public CustomerDto findCustomerById(Long id);
 }
