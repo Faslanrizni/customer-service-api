@@ -17,5 +17,6 @@ public class WebClientConfig {
         WebClient webClient = WebClient.builder()
                 .baseUrl(orderServiceUrl).build();
         return webClient;
+
     }
 }
