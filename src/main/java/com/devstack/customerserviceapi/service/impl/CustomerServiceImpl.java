@@ -9,7 +9,9 @@ import com.devstack.customerserviceapi.entity.Customer;
 import com.devstack.customerserviceapi.feigns.OrderFeignClient;
 import com.devstack.customerserviceapi.repo.CustomerRepo;
 import com.devstack.customerserviceapi.service.CustomerService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.jaxb.SpringDataJaxb;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -19,14 +21,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepo customerRepo;
-
     @Autowired
     private WebClient webClient;
+//    @Autowired
 
-    @Autowired
     private OrderFeignClient orderFeignClient;
 
     @Autowired
