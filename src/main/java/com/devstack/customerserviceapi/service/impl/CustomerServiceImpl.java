@@ -6,6 +6,7 @@ import com.devstack.customerserviceapi.dto.OrderDto;
 import com.devstack.customerserviceapi.dto.ResponseCustomerDto;
 import com.devstack.customerserviceapi.dto.ResponseOrderDto;
 import com.devstack.customerserviceapi.entity.Customer;
+import com.devstack.customerserviceapi.feigns.OrderFeignClient;
 import com.devstack.customerserviceapi.repo.CustomerRepo;
 import com.devstack.customerserviceapi.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private WebClient webClient;
+
+    @Autowired
+    private OrderFeignClient orderFeignClient;
 
     @Autowired
     public CustomerServiceImpl(CustomerRepo customerRepo) {
@@ -45,7 +49,8 @@ public class CustomerServiceImpl implements CustomerService {
         if (selectedCustomer.isEmpty()){
             throw new RuntimeException("Not found");
         }
-        ResponseOrderDto orders = findOrders(selectedCustomer.get().getId());
+//        ResponseOrderDto orders = findOrders(selectedCustomer.get().getId());
+          ResponseOrderDto orders = orderFeignClient.findOrdersByCustomer(id);
         CustomerDto customerDto = new CustomerDto(
                 selectedCustomer.get().getId(),
                 selectedCustomer.get().getName(),
