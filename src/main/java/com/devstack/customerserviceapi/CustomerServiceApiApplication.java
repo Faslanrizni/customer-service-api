@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Bean;
 @EnableFeignClients
 @EnableDiscoveryClient
 public class CustomerServiceApiApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(CustomerServiceApiApplication.class, args);
 	}
